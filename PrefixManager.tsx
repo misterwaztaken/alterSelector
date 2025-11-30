@@ -1,11 +1,27 @@
 /* PrefixManager.tsx 
- * meant to be used with the AlterSelector Vencord plugin  
+ * meant to be used with the AlterSelector Vencord plugin 	
  * Made with <3 by kazwaztaken */
 
 import { React, Forms } from "@webpack/common";
 import { PrefixEntry, getPrefixEntries, setPrefixEntries } from "./settings";
 
-const { FormTitle, FormText, FormSection } = Forms;
+const { FormTitle, FormText } = Forms;
+
+const generatePreviewMessage = (prefixText: string): string => {
+    // Trim to clean up excess whitespace
+    const trimmedPrefix = prefixText.trim();
+    
+    // Simulate a user message to show context
+    const mockMessage = "Hello, this is my message content!";
+    
+    if (!trimmedPrefix) {
+        return mockMessage;
+    }
+
+    // Combine prefix and message
+    return `${trimmedPrefix} ${mockMessage}`;
+};
+
 
 export default function PrefixManager() {
   // use local state for editing then persist via helpers
@@ -60,7 +76,7 @@ export default function PrefixManager() {
       {entries.length > 0 && (
         <div className="pm-row">
           <label className="pm-label">Select Entry</label>
-          <select title="Select entry" className="pm-field" value={selectedId ?? ""} onChange={e => setSelectedId(e.target.value || null)}>
+          <select title="Select entry" className="pm-field-dropdown" value={selectedId ?? ""} onChange={e => setSelectedId(e.target.value || null)}>
             {entries.map(e => <option key={e.id} value={e.id}>{e.label}</option>)}
           </select>
         </div>
@@ -69,14 +85,31 @@ export default function PrefixManager() {
       {selectedEntry && currentEdit && (
         <>
           <div className="pm-row">
-            <label className="pm-label">Prefix Name</label>
+            <label className="pm-label">Alter Name</label>
             <input title="Prefix label" className="pm-field" type="text" value={currentEdit.label} onChange={e => setCurrentEdit(c => ({ ...c!, label: e.target.value }))} />
           </div>
 
           <div className="pm-row">
-            <label className="pm-label">Prefix Text</label>
+            <label className="pm-label">Prefix text</label>
             <input title="Prefix text" className="pm-field" type="text" value={currentEdit.text} onChange={e => setCurrentEdit(c => ({ ...c!, text: e.target.value }))} />
           </div>
+          
+          {/* --- NEW CHAT PREVIEW SECTION --- */}
+          {/*<div className="pm-row-preview">
+            <label className="pm-label-preview">Message Preview</label>
+            <div className="pm-chat-preview-container">
+              <div className="pm-chat-message-bubble">
+                {/* Prefix Text is bolded to highlight it */}{/*
+                <span className="pm-chat-prefix-text">
+                    {currentEdit.text.trim()}{currentEdit.text.trim() && ' '}
+                </span>
+                <span className="pm-chat-message-content">
+                    Hello, this is my message content!
+                </span>
+              </div>
+            </div>
+          </div>*/}
+          {/* ---------------------------------- */}
 
           <div className="pm-actions">
             <button className="applyButton" onClick={handleApplyChanges}>Apply</button>

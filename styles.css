@@ -44,6 +44,7 @@
   border-right: 5px solid transparent;
   border-top: 5px solid #b9bbbe; /* Light grey arrow */
   transition: transform 0.2s;
+  margin-left: 7px;
 }
 
 /* Rotate arrow when open */
@@ -372,4 +373,131 @@ button:disabled {
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+/* --- Message Preview Styling --- */
+
+/* Preview row container to align the label and the message bubble */
+.pm-row-preview {
+  display: flex;
+  margin-bottom: 15px;
+  gap: 10px;
+  align-items: flex-start; /* Align label to the top of the preview box */
+}
+
+/* Label for the preview, same style as others but aligned to the top */
+.pm-label-preview {
+  color: #b9bbbe;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  min-width: 120px;
+  flex-shrink: 0;
+  padding-top: 5px; /* Subtle adjustment to align with the message content top */
+}
+
+/* Container for the chat bubble */
+.pm-chat-preview-container {
+  flex-grow: 1;
+  /* Use a subtle background to distinguish the preview area */
+  background-color: #2f3136; 
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* The actual message bubble style */
+.pm-chat-message-bubble {
+  /* Mimics a message from another user in a channel */
+  color: #dcddde;
+  font-size: 14px;
+  line-height: 1.3;
+  padding: 5px 8px;
+  background-color: #36393f; /* Darker than the container */
+  border-radius: 6px;
+  width: fit-content; /* Make the bubble only as wide as its content */
+  max-width: 100%;
+}
+
+/* Style to visually distinguish the prefix text */
+.pm-chat-prefix-text {
+  font-weight: 700; /* Bold the prefix text */
+  color: #7289da; /* Optional: Use Discord accent blue for high visibility */
+  /* Or just use white: color: #ffffff; */
+  white-space: pre-wrap; /* Preserve spaces/line breaks if needed */
+}
+
+.pm-chat-message-content {
+    /* Ensure the rest of the text is standard */
+    font-weight: 400;
+    color: #dcddde;
+}
+
+/* --- 1. Modal Backdrop (Overlay) --- */
+.modal-backdrop {
+  position: fixed; /* Fixed to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* Semi-transparent dark overlay */
+  background-color: rgba(0, 0, 0, 0.6); 
+  
+  /* Center the modal content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Must be higher than any other Discord element (e.g., chat, popups, other modals) */
+  z-index: 10000; 
+}
+
+/* --- 2. Modal Content Window --- */
+.modal-content {
+  /* Discord settings card color */
+  background-color: #36393f; 
+  color: #dcddde;
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  width: 400px; /* Adjust size as needed */
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto; /* Allow scrolling if content is long */
+}
+
+/* --- 3. Header and Close Button --- */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #2f3136; /* Subtle separator */
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-close-button {
+    /* Use the same style as other Discord buttons, but typically smaller and muted */
+    background: none;
+    color: #b9bbbe; /* Muted color */
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s ease;
+}
+
+.modal-close-button:hover {
+    color: #ffffff; /* White on hover */
+}
+
+/* --- 4. Modal Body --- */
+.modal-body {
+    padding: 16px;
+    /* Add specific padding or spacing for your form elements here */
 }

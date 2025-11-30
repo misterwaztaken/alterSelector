@@ -14,8 +14,11 @@ const SearchableChatDrop: React.FC<ChatDropProps> = ({ channel }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   
-  // Ref for the main container to calculate its position
+  // Ref for the main container (the input button) to calculate its position
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+  
+  // NEW: Ref for the Portal Menu Container to measure its height
+  const menuRef = React.useRef<HTMLDivElement>(null); 
   
   const entries = getPrefixEntries();
   const allOptions = [
@@ -53,7 +56,7 @@ const SearchableChatDrop: React.FC<ChatDropProps> = ({ channel }) => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         // Also check if the click was inside the popup (which is now portaled)
-        const isClickInsidePopup = document.querySelector('.chatdrop-options-list.is-portaled')?.contains(event.target as Node);
+        const isClickInsidePopup = menuRef.current?.contains(event.target as Node);
         if (!isClickInsidePopup) {
             setIsOpen(false);
             setSearchQuery("");
@@ -66,37 +69,52 @@ const SearchableChatDrop: React.FC<ChatDropProps> = ({ channel }) => {
     };
   }, []);
 
+  // --- NEW: Dynamic Positioning Effect ---
+  React.useEffect(() => {
+    if (!isOpen || !dropdownRef.current || !menuRef.current) return;
+
+    // 1. Get the position of the input button
+    const inputRect = dropdownRef.current.getBoundingClientRect();
+    
+    // 2. Get the actual height of the menu
+    const menuElement = menuRef.current;
+    const menuHeight = menuElement.offsetHeight; // This is the key change!
+
+    // 3. Calculate Top Position: Input Top - Menu Height - Gap (4px)
+    const newTop = inputRect.top - menuHeight - 4;
+
+    // 4. Calculate Width (as before: min of input width or preferred width)
+    const minWidth = inputRect.width;
+    const preferredWidth = 300; 
+    const listWidth = Math.max(minWidth, preferredWidth);
+
+    // 5. Apply the position and layout styles directly to the menu element
+    menuElement.style.top = `${newTop}px`;
+    menuElement.style.left = `${inputRect.left}px`;
+    menuElement.style.width = `${listWidth}px`;
+    menuElement.style.zIndex = '9999';
+    menuElement.style.opacity = '1'; // Make it visible
+    
+    // Note: The dependency array includes 'searchQuery' because changing the filter 
+    // might change the number of visible options, which could change the total menu height.
+  }, [isOpen, searchQuery]); 
+
   const selectedLabel = allOptions.find(opt => opt.id === selection)?.label || 'None';
 
   // --- PORTAL RENDERING LOGIC ---
   const renderPortal = () => {
     if (!isOpen || !dropdownRef.current) return null;
 
-    const rect = dropdownRef.current.getBoundingClientRect();
-    
-    // --- NEW LOGIC HERE ---
-    const minWidth = rect.width; // The width of the input field
-    const preferredWidth = 300; // Define your desired minimum width for the popup
-    const listWidth = Math.max(minWidth, preferredWidth); // Use the larger of the two
-    // ----------------------
-    
-    const listHeight = 280; 
-
     const style: React.CSSProperties = {
       position: 'absolute',
-      // Top position: input top - list height - gap (4px)
-      // NOTE: You might need to adjust the calculation slightly to account for the listHeight.
-      // If the list height is dynamic, this fixed value will be inaccurate.
-      top: rect.top - listHeight - 4, 
-      left: rect.left,
-      width: listWidth, // <-- Now uses the calculated wider width
-      zIndex: 9999, 
+      opacity: 0, // Start invisible to prevent flicker before positioning
+      // Initial positioning values are not critical since they are overridden by the useEffect
     };
 
-    // Use ReactDOM.createPortal to render the list into the document body
     return ReactDOM.createPortal(
       <div 
         className="chatdrop-options-list is-portaled" 
+        ref={menuRef} // <--- Attach the menuRef here
         style={style}
       >
         <input
