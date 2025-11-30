@@ -1,0 +1,375 @@
+/* --- Custom Select Component Container --- */
+.chatdrop-container {
+  position: relative;
+  width: 200px; /* <--- Keep this for the input button width */
+  margin: 15px 0;
+  /* flex end yourself NOw */
+  justify-content: flex-end;
+}
+
+/* --- Custom Select Display Field (The "Input" part) --- */
+.chatdrop-custom-select {
+  /* Discord Input Field Styling */
+  background-color: #36393f; 
+  color: #dcddde;
+  border: 1px solid #202225;
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none; /* just to shut it up, this is going to run in electron so there is no need to support ancient browsers */
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chatdrop-custom-select:hover {
+  border-color: #7289da; /* Blue hover glow */
+}
+
+/* --- Displayed Value --- */
+.chatdrop-display-value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Custom Arrow Indicator --- */
+.chatdrop-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #b9bbbe; /* Light grey arrow */
+  transition: transform 0.2s;
+}
+
+/* Rotate arrow when open */
+.chatdrop-custom-select.is-open .chatdrop-arrow {
+  transform: rotate(180deg);
+  border-top: 5px solid #7289da; /* Blue arrow when open */
+}
+
+/* --- Options List Container --- */
+/* We are using an inline 'style' object in React, so we remove the positioning CSS here. */
+.chatdrop-options-list {
+  /* REMOVE: position: absolute; */
+  /* REMOVE: bottom: 100%; */
+  /* REMOVE: left: 0; */
+  /* REMOVE: width: 100%; */
+  /* REMOVE: margin-bottom: 4px; */
+  /* REMOVE: z-index: 10; */
+
+  /* Keep the visual styles */
+  background-color: #2f3136; 
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+}
+
+/* Add this class to prevent the chatdrop-options-list from having a fixed width/height 
+   when rendered inline, though the 'is-portaled' div handles the layout now. */
+.chatdrop-options-list.is-portaled {
+    /* Ensure the list height is constrained for the scrollbar to work properly */
+    max-height: 280px;
+    box-sizing: border-box; /* Important for accurate positioning */
+}
+
+/* --- Search Input Field within the dropdown --- */
+.chatdrop-search-input {
+  /* Match Discord Input Field Styling */
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #36393f; 
+  color: #dcddde;
+  border: 1px solid #202225;
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.chatdrop-search-input:focus {
+  outline: none;
+  border-color: #7289da;
+}
+
+/* --- Scrollable Options Area --- */
+.chatdrop-options-scroll {
+    max-height: 200px; /* Set a max height for scrollability */
+    overflow-y: auto;
+    /* Optional: Discord-style scrollbar (requires vendor prefixes) */
+    /* Check Discord's main CSS for its specific scrollbar styling if needed */
+}
+
+/* --- Individual Option Item --- */
+.chatdrop-option {
+  color: #dcddde;
+  padding: 6px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  font-size: 14px;
+}
+
+.chatdrop-option:hover {
+  background-color: #3f4247; /* Highlight on hover */
+}
+
+/* --- Selected Option --- */
+.chatdrop-option.is-selected {
+  background-color: #7289da; /* Discord Blue background */
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* --- No Results Message --- */
+.chatdrop-no-results {
+    color: #b9bbbe;
+    padding: 6px 8px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* end new styles */
+
+/* --- Container Styling --- */
+.chatdrop-container {
+  /* Mimic Discord's spacing/alignment in a settings panel */
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* --- Select Element Styling --- */
+.chatdrop-select {
+  /* Core Discord look and dark theme colors */
+  background-color: #36393f; /* Card background/Input fill */
+  color: #dcddde; /* Light, readable text */
+  border: 1px solid #202225; /* Very dark, subtle border */
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 14px;
+  min-width: 200px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  /* Remove default browser styling for better control */
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+
+  /* Custom dropdown arrow (SVG data URL) */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23dcddde"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 30px; /* Make space for the custom arrow */
+}
+
+/* --- Focus/Hover States --- */
+.chatdrop-select:hover {
+  border-color: #36393f;
+  /* Subtle blue glow on hover */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 0 1px #7289da;
+}
+
+.chatdrop-select:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #7289da; /* Discord blue accent */
+  box-shadow: 0 0 0 1px #7289da, 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Option/Dropdown List Styling (Limited control) --- */
+/* Note: Styling for <option> elements and the dropdown list itself has very 
+   limited and inconsistent support across browsers. */
+.chatdrop-select option {
+  background-color: #36393f; /* Match the select background */
+  color: #dcddde;
+  padding: 5px 10px;
+}
+
+.pm-section {
+  /* Mimic the card/panel appearance */
+  background-color: #36393f; 
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.FormTitle h2 {
+  color: #ffffff; /* White title text */
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #2f3136; /* Subtle separator */
+  padding-bottom: 10px;
+  display: flex; /* For emoji alignment */
+  align-items: center;
+  gap: 8px;
+}
+
+.FormText {
+  color: #b9bbbe; /* Muted hint text */
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.pm-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px; /* Space between label and field */
+}
+
+.pm-label {
+  color: #b9bbbe; /* Muted text for labels */
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  min-width: 120px; /* Align fields neatly */
+  flex-shrink: 0;
+}
+
+.pm-field {
+  flex-grow: 1; /* Makes the input/select take up the rest of the space */
+  background-color: #2f3136; /* Input/field background */
+  color: #dcddde;
+  border: 1px solid #202225;
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  
+  /* Select specific styling from previous response */
+  /* Remove default browser styling for select */
+  appearance: none; 
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  
+  /* Custom dropdown arrow for select */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23dcddde"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 30px; 
+}
+
+.pm-field:focus {
+  outline: none;
+  border-color: #7289da; /* Discord Blue focus highlight */
+  box-shadow: 0 0 0 1px #7289da;
+}
+
+/* Options within the select */
+.pm-field option {
+  background-color: #2f3136;
+  color: #dcddde;
+}
+
+button {
+  /* Default Button (e.g., 'Add New Entry') */
+  background-color: #7289da; /* A shade of Discord Blue */
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  line-height: 1;
+}
+
+button:hover {
+  background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+.pm-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pm-spacer {
+  flex-grow: 1; /* Pushes elements apart */
+}
+
+/* Primary/Apply Button */
+.pm-actions button:first-child {
+    background-color: #7289da;
+}
+.pm-actions button:first-child:hover {
+    background-color: #677bc4;
+}
+
+/* Delete Button */
+.pm-delete {
+  background-color: #f04747; /* Discord Red for danger */
+  color: #dcddde; 
+}
+
+.pm-delete-disabled {
+    background-color: #5c626e;
+    cursor: not-allowed; 
+    opacity: 0.6;
+}
+.pm-delete:hover {
+  background-color: #d83434;
+}
+
+/* Disabled button state */
+button:disabled {
+  background-color: #5c626e;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pm-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #dcddde; /* White/Light Text */
+  font-size: 14px;
+  margin-right: 15px;
+}
+
+.pm-checkbox input[type="checkbox"] {
+  /* Hide the default browser checkbox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #5c626e; /* Border color */
+  border-radius: 3px;
+  background-color: #2f3136; /* Background color when unchecked */
+  margin-right: 8px;
+  position: relative;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.pm-checkbox input[type="checkbox"]:checked {
+  border-color: #7289da; /* Discord Blue border when checked */
+  background-color: #7289da; /* Discord Blue fill when checked */
+}
+
+/* Custom checkmark using the ::after pseudo-element */
+.pm-checkbox input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
