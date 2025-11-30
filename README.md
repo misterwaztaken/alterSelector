@@ -17,7 +17,7 @@ In case stuff like PluralKit isn't available in the scenario, such as group chat
   - trigger with manual button push (dunno where to put said button)
 - discord rpc integration
   - discord rpc is probably gonna follow something like above
-  - custom profile pictures for rpc image + text and stuff like that
+  - custom "profile pictures" for rpc image + text and stuff like that
  
 ## How to install
 1. Follow [this guide](https://docs.vencord.dev/installing/)
