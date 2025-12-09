@@ -253,6 +253,24 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
+}
+
+.pm-field-dropdown {
+    flex-grow: 1; /* Makes the input/select take up the rest of the space */
+  background-color: #2f3136; /* Input/field background */
+  color: #dcddde;
+  border: 1px solid #202225;
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  
+  /* Select specific styling from previous response */
+  /* Remove default browser styling for select */
+  appearance: none; 
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
   
   /* Custom dropdown arrow for select */
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23dcddde"><path d="M7 10l5 5 5-5z"/></svg>');
